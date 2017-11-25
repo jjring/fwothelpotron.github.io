@@ -177,7 +177,7 @@ function drawCharStats() {
         total_cp += game_data['lvl_cpl'].slice(0, work_data[value][3]).reduce((ac, cp) => ac + cp);
     });
 
-    $('.stats_text').html('<div>Unique<div>' + user_data['msc_sts']['chr_unq'].length + '</div></div><div>outfits<div>' + user_data['msc_sts']['chr_out'].length + '</div></div><div>Total<div>' + user_data['chr_own'].length + ' of ' + Object.keys(user_data['chr_all']).length + '</div></div><div>Average level<div>' + user_data['msc_sts']['chr_avg'] + '</div></div>');
+    $('.stats_text').html('<div>Unique<div>' + user_data['msc_sts']['chr_unq'].length + '</div></div><div>Outfits<div>' + user_data['msc_sts']['chr_out'].length + '</div></div><div>Total<div>' + user_data['chr_own'].length + ' of ' + Object.keys(user_data['chr_all']).length + '</div></div><div>Average level<div>' + user_data['msc_sts']['chr_avg'] + '</div></div>');
     $('.stats_expense').html('Leveling up your characters, you spent <div><div><div class="items_icon items_nb"></div>' + (total_cp * 1.6).toLocaleString() + '</div><div><div class="items_icon items_giga_r"></div>' + total_cp.toLocaleString() + '</div></div>');
 }
 
