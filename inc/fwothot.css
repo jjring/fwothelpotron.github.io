@@ -11,7 +11,7 @@
     #main_wrap { max-width: 800px; margin: 0 auto; }
     #main_head { margin: 0 -10px 30px -10px; display: flex; }
     #main_body { position: relative; }
-    #main_body > div, #main_head_div { min-width: 320px; }
+    #main_body > div, #main_head > div { min-width: 320px; z-index: 1000; }
 
     #main_head > div { margin: 0 10px; }
     #main_logo, #noscript > div > div:first-child { font-size: 30px; letter-spacing: -0.06em; line-height: 30px; color: #ffed42; flex-grow: 1; white-space: nowrap; }
