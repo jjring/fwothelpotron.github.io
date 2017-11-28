@@ -427,7 +427,7 @@ function appInit(init) {
         // Roster backup
         $('#menu_backup').on('click', function(){
             var mod_head = 'Import / Export data',
-                mod_body = '<span class="title_l shadow_l">Better safe than sorry!</span><br /><br /><span class="text">Your current roster is stored in your own browser\'s cache which means it can be easily deleted by accident.<br /><br /><span>To export</span> the data and be prepared in case of a mishap, periodically copy the data below and paste it in a safe place.<br /><br /><div class="user_data_form"><button type="button" class="user_data_control" id="user_data_copy" data-clipboard-text="' + JSON.stringify(user_data['chr_all']).replace(/"/g, '&quot;') + '">Copy data to clipboard</button></div><div class="user_data_response" id="user_data_copy_response">Data copied, go paste!</div><br /><br /><span>To import</span> your backup, simply paste it in the field below and hit <span>Import</span>.<br /><br /><div class="user_data_form"><input type="text" class="user_data_control" id="user_data_value" value="" /><button type="button" class="user_data_control" id="user_data_import">Import</button></div><div class="user_data_response" id="user_data_import_response"></div></span>',
+                mod_body = '<span class="title_l shadow_l">Better safe than sorry!</span><br /><br /><span class="text">Your current roster is stored in your own browser\'s cache which means it can be easily deleted by accident.<br /><br /><span>To export</span> the data and be prepared in case of a mishap, periodically copy the data below and paste it in a safe place.<br /><br /><div class="user_data_form"><button type="button" class="user_data_control" id="user_data_copy" data-clipboard-text="' + JSON.stringify(user_data['chr_all']).replace(/"/g, '&quot;') + '">Copy data to clipboard</button></div><div class="user_data_response" id="user_data_copy_response"></div><br /><br /><span>To import</span> your backup, simply paste it in the field below and hit <span>Import</span>.<br /><br /><div class="user_data_form"><input type="text" class="user_data_control" id="user_data_value" value="" /><button type="button" class="user_data_control" id="user_data_import">Import</button></div><div class="user_data_response" id="user_data_import_response"></div></span>',
                 mod_foot = {
                     'MMMHM' : function() {
                         clipboard.destroy();
@@ -439,7 +439,9 @@ function appInit(init) {
 
             clipboard = new Clipboard('#user_data_copy');
             clipboard.on('success', function(e) {
-                $('#user_data_copy_response').show();
+                $('#user_data_copy_response').text('Data copied, go paste!').show();
+            }).on('error', function(e) {
+                $('#user_data_copy_response').text('Oops, unable to copy data').show();
             });
         });
 
