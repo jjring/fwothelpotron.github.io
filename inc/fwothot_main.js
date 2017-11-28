@@ -125,7 +125,7 @@ function dataUpdate(drawTable, drawStats, init) {
 function drawCharTable() {
     //console.log('[' + new Date().toISOString().substr(11, 12) + '] ' + arguments.callee.name + ' - called by ' + arguments.callee.caller.name);
 
-    $('#char_tbl_own tbody').remove();
+    $('#char_tbl_own .tbl_b').remove();
    
     var chr_prv = null,
         chr_lst = user_data['chr_own'],
@@ -152,18 +152,18 @@ function drawCharTable() {
         $.each( chr_lst, function( key, value ) {
             var isGroup = chr_prv == work_data[value][0];
 
-            chr_txt += isGroup ? '' : (key == 0) ? '<tbody>' : '</tbody><tbody>';
-            chr_txt += '<tr><td>' + work_data[value][0] + (work_data[value][1] ? ' - ' + work_data[value][1] : '') + '<td><div title="' + game_data['chr_cls'][work_data[value][2]][0] + '" class="class_icon table_class table_class_' + work_data[value][2] + '"><div></td><td class="level_char" data-id="' + value + '"><span>' + work_data[value][3] + '</span><div class="level_control"></div></td><td>' + game_data['chr_atk'][work_data[value][4]] + '</td></tr>';
+            chr_txt += isGroup ? '' : (key == 0) ? '<div class="tbl_b">' : '</div><div class="tbl_b">';
+            chr_txt += '<div class="tbl_r"><div class="tbl_c">' + work_data[value][0] + (work_data[value][1] ? ' - ' + work_data[value][1] : '') + '</div><div class="tbl_c"><div title="' + game_data['chr_cls'][work_data[value][2]][0] + '" class="class_icon table_class table_class_' + work_data[value][2] + '"></div></div><div class="tbl_c level_char" data-id="' + value + '"><span>' + work_data[value][3] + '</span><div class="level_control"></div></div><div class="tbl_c">' + game_data['chr_atk'][work_data[value][4]] + '</div></div>';
 
             chr_prv = work_data[value][0];
         });
     } else {
-        chr_txt = '<tbody><tr><td colspan="4" class="char_empty">No characters found.</td></tr>';
+        chr_txt = '<div class="tbl_b"><div class="tbl_r"><div class="tbl_c char_empty">No characters found.</div></div>';
     }
 
-    chr_txt += '</tbody>';
+    chr_txt += '</div>';
 
-    $(chr_txt).insertAfter($('#char_tbl_own thead'));
+    $(chr_txt).insertAfter($('#char_tbl_own .tbl_h'));
 
     $('#tab_head_2, #tab_body_2').toggleClass('hasFilter', has_flt);
 }
@@ -193,7 +193,7 @@ function drawCharSetup(init) {
         chr_foot = {
             'DONE' : function() {
                 var chg = false,
-                    set = $('#modal_body input:checkbox');
+                    set = $('#modal_body .controls input:checkbox');
 
                 if (set.filter(':checked').length) {
                     set.each(function(){
@@ -207,26 +207,26 @@ function drawCharSetup(init) {
                     });
 
                     drawModal();
-                    
+
                     if (chg || init) {
                         dataUpdate(true, true, init);
                     }
                 }
             }
         };
-        
+
     if (init) {
         chr_body += '<div class="text">Check all the characters you currently have in <span>Futurama: Worlds of Tomorrow</span>. Don\'t worry if you can\'t find a character, the list is constantly updated as we get more events and characters.</div>';
     }
-    
-    chr_body += '<div class="controls">';
+
+    chr_body += '<div class="select_all"><label><input class="select_char" id="select_char_all" type="checkbox"' + (init ? '' : (user_data['chr_rst'].length != 0 ? '' : ' checked="checked"')) + '/><span class="control_checkbox"><span class="items_icon items_ck"></span></span>Select all characters</label></div><div class="controls">';
 
     $.each( work_data, function( key, value ) {
         chr_body += '<label><input class="select_char" id="select_char_' + key + '" type="checkbox"' + (value[3] > 0 ? ' checked="checked"' : '') + '/><span class="control_checkbox"><span class="items_icon items_ck"></span></span>' + value[0] + (value[1] != null ? ' - ' + value[1] : '') + '</label>';
     });
-    
+
     chr_body += '</div>';
-    
+
     if (!init) {
         chr_foot['CANCEL'] = function() {
             drawModal();
@@ -287,7 +287,7 @@ function appInit(init) {
         }
 
         // Controls - Characters - Level
-        $('#char_tbl_own').on('click', 'tr', function(e) {
+        $('#char_tbl_own').on('click', '.tbl_b .tbl_r', function(e) {
             if (!$(e.target).closest('.level_control', this).length) {
                 var lvl_ctr_par = $(this).find('.level_char'),
                     lvl_ctr_elm = lvl_ctr_par.find('.level_control'),
@@ -318,7 +318,7 @@ function appInit(init) {
                     });
                 }
 
-                $('tr.selected').add(this).toggleClass('selected');
+                $('.tbl_r.selected').add(this).toggleClass('selected');
 
             }
         });
@@ -474,3 +474,19 @@ function appInit(init) {
         });
     }
 }
+
+// Initialize
+$(document).ready(function(){
+    appInit();
+
+    // Roster select all
+    $('#main_modal').on('change', 'input:checkbox', function() {
+        var chk_set = $('#main_modal .controls input:checkbox');
+
+        if ($(this).prop('id') == 'select_char_all') {
+            chk_set.prop('checked', $(this).prop('checked'));
+        } else {
+            $('#main_modal #select_char_all').prop('checked', chk_set.length == chk_set.filter(':checked').length);
+        }
+    });
+});
