@@ -23,7 +23,7 @@
         '20' : [ "Butcher Bot",                null,                 2, 0, 1 ],
         '21' : [ "Calculon",                   null,                 0, 0, 0 ],
         '22' : [ "Calculon",                   "Ghost",              2, 0, 0 ],
-        '23' : [ "Calculon",                   "Shakespeare",        4, 0, 3 ],
+        '23' : [ "Calculon",                   "Shakespeare",        4, 0, 0 ],
         '24' : [ "Father Changstein El-Gamal", null,                 4, 0, 3 ],
         '25' : [ "Chris Hardwick",             null,                 0, 0, 2 ],
         '26' : [ "Crushinator",                null,                 4, 0, 1 ],
