@@ -59,7 +59,7 @@
         '56' : [ "Lrrr",                       null,                 0, 0, 2 ],
         '57' : [ "Malfunctioning Eddie",       null,                 3, 0, 0 ],
         '58' : [ "Monique",                    null,                 4, 0, 2 ],
-        '59' : [ "Neil deGrasse Tyson",        null,                 1, 0, 3 ],
+        '59' : [ "Neil deGrasse Tyson",        null,                 1, 0, 0 ],
         '60' : [ "Nixon & Agnew",              null,                 0, 0, 2 ],
         '61' : [ "Ndnd",                       null,                 4, 0, 2 ],
         '62' : [ "Pazuzu",                     null,                 3, 0, 1 ],
