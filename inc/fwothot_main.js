@@ -139,11 +139,17 @@ function drawCharTable() {
             has_flt = true;
 
             if (type_id == 1){
-                chr_lst = chr_lst.filter((value) => (user_data['msc_flt'][type].indexOf(0) != -1 ? work_data[value][type_id] == null : false) || (user_data['msc_flt'][type].indexOf(1) != -1 ? work_data[value][type_id] != null : false));
+                chr_lst = chr_lst.filter(function(value) {
+                    return (user_data['msc_flt'][type].indexOf(0) != -1 ? work_data[value][type_id] == null : false) || (user_data['msc_flt'][type].indexOf(1) != -1 ? work_data[value][type_id] != null : false);
+                });
             } else if (type_id == 3) {
-                chr_lst = chr_lst.filter((value) => work_data[value][type_id] >= user_data['msc_flt'][type][0] && work_data[value][type_id] <= user_data['msc_flt'][type][1] );
+                chr_lst = chr_lst.filter(function(value) {
+                    return (work_data[value][type_id] >= user_data['msc_flt'][type][0]) && (work_data[value][type_id] <= user_data['msc_flt'][type][1]);
+                });
             } else {
-                chr_lst = chr_lst.filter((value) => user_data['msc_flt'][type].indexOf(work_data[value][type_id]) > -1);
+                chr_lst = chr_lst.filter(function(value) {
+                    return user_data['msc_flt'][type].indexOf(work_data[value][type_id]) > -1;
+                });
             }
         }
     });
@@ -178,7 +184,9 @@ function drawCharStats() {
     });
 
     $.each( user_data['chr_own'], function( key, value ) {
-        total_cp += game_data['lvl_cpl'].slice(0, work_data[value][3]).reduce((ac, cp) => ac + cp);
+        total_cp += game_data['lvl_cpl'].slice(0, work_data[value][3]).reduce(function(ac, cp) {
+            return ac + cp;
+        });
     });
 
     $('.stats_text').html('<div>Unique<div>' + user_data['msc_sts']['chr_unq'].length + '</div></div><div>Outfits<div>' + user_data['msc_sts']['chr_out'].length + '</div></div><div>Total<div>' + user_data['chr_own'].length + ' of ' + Object.keys(user_data['chr_all']).length + '</div></div><div>Average level<div>' + user_data['msc_sts']['chr_avg'] + '</div></div>');
@@ -367,7 +375,9 @@ function appInit(init) {
             var cp_output = '';
 
             if (values[0] != values[1]) {
-                var cp = game_data['lvl_cpl'].slice(values[0], values[1]).reduce((ac, cp) => ac + cp);
+                var cp = game_data['lvl_cpl'].slice(values[0], values[1]).reduce(function(ac, cp) {
+                    return ac + cp;
+                });
 
                 cp_output += 'Leveling up from <span>level ' + values[0] + '</span> to <span>level ' + values[1] + '</span>, you\'ll need <div><div><div class="items_icon items_nb"></div>' + (cp * 1.6).toLocaleString() + '</div></div> and <div class="calc_level_cp">';
 
@@ -395,7 +405,7 @@ function appInit(init) {
         });
 
         // Controls - UI - Tabs
-        $('div[id^=tab_head_').on('click', function() {
+        $('div.tab_head').on('click', function() {
             var cur_id = new_id = $(this).prop('id').substr(9),
                 old_id = $('#tabs_head_main').data('active'),
                 select = '#tab_head_' + cur_id + ', #tab_body_' + cur_id,
