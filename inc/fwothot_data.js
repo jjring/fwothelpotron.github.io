@@ -73,7 +73,7 @@
         '69' : [ "Slurms McKenzie",            null,                 0, 0, 0 ],
         '70' : [ "Smitty",                     null,                 3, 0, 1 ],
         '71' : [ "Stephen Hawking",            null,                 1, 0, 2 ],
-        '75' : [ "Tinny Tim",                  null,                 3, 0, 3 ],
+        '75' : [ "Tinny Tim",                  null,                 3, 0, 0 ],
         '72' : [ "URL",                        null,                 2, 0, 1 ],
         '73' : [ "URL",                        "Off-duty",           3, 0, 1 ],
         '74' : [ "Mutant Vyolet",              null,                 3, 0, 0 ]
