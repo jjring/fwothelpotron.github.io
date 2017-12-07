@@ -1,4 +1,4 @@
-/* Character list (74) ------------------------------ */
+/* Character list (76) ------------------------------ */
 
     game_data['chr_all'] = {
          '1' : [ "Amy",                        null,                 1, 0, 0 ],
@@ -13,6 +13,7 @@
         '10' : [ "Bender",                     "Hunter",             3, 0, 2 ],
         '11' : [ "Bender",                     "Pharaoh",            0, 0, 1 ],
         '12' : [ "Bender",                     "Ramblin' Rodriguez", 3, 0, 0 ],
+        '76' : [ "Bender",                     "Santa Claus",        4, 0, 3 ],
         '13' : [ "Bender's Mom",               null,                 2, 0, 1 ],
         '14' : [ "Bev",                        null,                 3, 0, 0 ],
         '15' : [ "Bill Nye",                   null,                 1, 0, 1 ],
@@ -72,6 +73,7 @@
         '69' : [ "Slurms McKenzie",            null,                 0, 0, 0 ],
         '70' : [ "Smitty",                     null,                 3, 0, 1 ],
         '71' : [ "Stephen Hawking",            null,                 1, 0, 2 ],
+        '75' : [ "Tinny Tim",                  null,                 3, 0, 3 ],
         '72' : [ "URL",                        null,                 2, 0, 1 ],
         '73' : [ "URL",                        "Off-duty",           3, 0, 1 ],
         '74' : [ "Mutant Vyolet",              null,                 3, 0, 0 ]
