@@ -1,4 +1,4 @@
-/* Character list (76) ------------------------------ */
+/* Character list (77) ------------------------------ */
 
     game_data['chr_all'] = {
          '1' : [ "Amy",                        null,                 1, 0, 0 ],
@@ -37,6 +37,7 @@
         '33' : [ "Fry",                        null,                 3, 1, 0 ],
         '34' : [ "Fry",                        "Bachelor",           4, 0, 0 ],
         '35' : [ "Fry",                        "Devilish",           0, 0, 0 ],
+        '77' : [ "Fry",                        "Power Suit",         3, 0, 2 ],
         '36' : [ "Fry",                        "Robot",              2, 0, 0 ],
         '37' : [ "Fry",                        "Slurm Duke",         4, 0, 0 ],
         '38' : [ "George Takei",               null,                 0, 0, 1 ],
