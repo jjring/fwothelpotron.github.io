@@ -13,7 +13,7 @@
         '10' : [ "Bender",                     "Hunter",             3, 0, 2 ],
         '11' : [ "Bender",                     "Pharaoh",            0, 0, 1 ],
         '12' : [ "Bender",                     "Ramblin' Rodriguez", 3, 0, 0 ],
-        '76' : [ "Bender",                     "Santa Claus",        4, 0, 3 ],
+        '76' : [ "Bender",                     "Santa Claus",        4, 0, 0 ],
         '13' : [ "Bender's Mom",               null,                 2, 0, 1 ],
         '14' : [ "Bev",                        null,                 3, 0, 0 ],
         '15' : [ "Bill Nye",                   null,                 1, 0, 1 ],
