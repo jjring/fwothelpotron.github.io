@@ -155,12 +155,12 @@ function drawCharTable() {
     });
 
     if (Object.keys(chr_lst).length) {
-        $.each( game_data['chr_ord'], function( key, value ) {
+        $.each( game_data['chr_ord'], function( index, value ) {
 
             if (chr_lst.indexOf(value) != -1) {
                 var isGroup = chr_prv == work_data[value][0];
 
-                chr_txt += isGroup ? '' : (key == 0) ? '<div class="tbl_b">' : '</div><div class="tbl_b">';
+                chr_txt += isGroup ? '' : (index == 0) ? '<div class="tbl_b">' : '</div><div class="tbl_b">';
                 chr_txt += '<div class="tbl_r"><div class="tbl_c">' + work_data[value][0] + (work_data[value][1] ? ' - ' + work_data[value][1] : '') + '</div><div class="tbl_c"><div title="' + game_data['chr_cls'][work_data[value][2]][0] + '" class="class_icon table_class table_class_' + work_data[value][2] + '"></div></div><div class="tbl_c level_char" data-id="' + value + '"><span>' + work_data[value][3] + '</span><div class="level_control"></div></div><div class="tbl_c">' + game_data['chr_atk'][work_data[value][4]] + '</div></div>';
 
                 chr_prv = work_data[value][0];
@@ -232,8 +232,8 @@ function drawCharSetup(init) {
 
     chr_body += '<div class="select_all"><label><input class="select_char" id="select_char_all" type="checkbox"' + (init ? '' : (user_data['chr_rst'].length != 0 ? '' : ' checked="checked"')) + '/><span class="control_checkbox"><span class="items_icon items_ck"></span></span>Select all characters</label></div><div class="controls">';
 
-    $.each( work_data, function( key, value ) {
-        chr_body += '<label><input class="select_char" id="select_char_' + key + '" type="checkbox"' + (value[3] > 0 ? ' checked="checked"' : '') + '/><span class="control_checkbox"><span class="items_icon items_ck"></span></span>' + value[0] + (value[1] != null ? ' - ' + value[1] : '') + '</label>';
+    $.each( game_data['chr_ord'], function( index, value ) {
+        chr_body += '<label><input class="select_char" id="select_char_' + value + '" type="checkbox"' + (work_data[value][3] > 0 ? ' checked="checked"' : '') + '/><span class="control_checkbox"><span class="items_icon items_ck"></span></span>' + work_data[value][0] + (work_data[value][1] != null ? ' - ' + work_data[value][1] : '') + '</label>';
     });
 
     chr_body += '</div>';
@@ -243,7 +243,7 @@ function drawCharSetup(init) {
             drawModal();
         }
     }
-    
+
     drawModal(chr_head, chr_body, chr_foot);
 }
 
@@ -257,7 +257,7 @@ function drawModal(head, body, foot, size) {
         $.each( foot, function( key, value ) {
             $('<button id="modal_button_' + key.replace(/[^a-zA-Z0-9]/g, '').toLowerCase() + '" type="button">' + key + '</button>').appendTo('#modal_foot').on('click', value);
         });
-        
+
         if (size) {
             $('#modal_cont').addClass(size);
         }
