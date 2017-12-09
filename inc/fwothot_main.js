@@ -54,7 +54,7 @@ function dataSync() {
             };
 
         mdl_body = Math.abs(chr_dif) + ' ' + (chr_dif > 0 ?  'new' : '' ) + ' character' + (Math.abs(chr_dif) == 1 ? ' was ': 's were') + ' ' + (chr_dif > 0 ?  'added to' : 'removed from' ) + ' the list of available characters.';
-        
+
         drawModal(mdl_head, mdl_body, mdl_foot, 'small');
 
         user_data['chr_all'] = temp_data;
@@ -69,7 +69,7 @@ function dataUpdate(drawTable, drawStats, init) {
     //console.log('[' + new Date().toISOString().substr(11, 12) + '] ' + arguments.callee.name + ' - called by ' + arguments.callee.caller.name + (!!init ? ' (init mode)' : ''));
 
     var temp_data = [];
-    
+
     user_data = { 'chr_all' : {}, 'chr_own' : [], 'chr_rst' : [], 'msc_flt' : {}, 'msc_sts' : { 'chr_unq' : [], 'chr_out' : [], 'chr_cls' : { '0' : [], '1' : [], '2' : [], '3' : [], '4' : [], '5' : [] }, 'chr_avg' : 0, 'chr_atk' : { '0' : [], '1' : [], '2' : [], '3' : [] } } };
 
     $.each( work_data, function( key, value ) {
@@ -107,7 +107,7 @@ function dataUpdate(drawTable, drawStats, init) {
                     drawModal();
                 }
             };
-        
+
         drawModal(mod_head, mod_body, mod_foot, 'small');
 
         appInit(init);
@@ -126,7 +126,7 @@ function drawCharTable() {
     //console.log('[' + new Date().toISOString().substr(11, 12) + '] ' + arguments.callee.name + ' - called by ' + arguments.callee.caller.name);
 
     $('#char_tbl_own .tbl_b').remove();
-   
+
     var chr_prv = null,
         chr_lst = user_data['chr_own'],
         chr_txt = '',
@@ -155,13 +155,16 @@ function drawCharTable() {
     });
 
     if (Object.keys(chr_lst).length) {
-        $.each( chr_lst, function( key, value ) {
-            var isGroup = chr_prv == work_data[value][0];
+        $.each( game_data['chr_ord'], function( key, value ) {
 
-            chr_txt += isGroup ? '' : (key == 0) ? '<div class="tbl_b">' : '</div><div class="tbl_b">';
-            chr_txt += '<div class="tbl_r"><div class="tbl_c">' + work_data[value][0] + (work_data[value][1] ? ' - ' + work_data[value][1] : '') + '</div><div class="tbl_c"><div title="' + game_data['chr_cls'][work_data[value][2]][0] + '" class="class_icon table_class table_class_' + work_data[value][2] + '"></div></div><div class="tbl_c level_char" data-id="' + value + '"><span>' + work_data[value][3] + '</span><div class="level_control"></div></div><div class="tbl_c">' + game_data['chr_atk'][work_data[value][4]] + '</div></div>';
+            if (chr_lst.indexOf(value) != -1) {
+                var isGroup = chr_prv == work_data[value][0];
 
-            chr_prv = work_data[value][0];
+                chr_txt += isGroup ? '' : (key == 0) ? '<div class="tbl_b">' : '</div><div class="tbl_b">';
+                chr_txt += '<div class="tbl_r"><div class="tbl_c">' + work_data[value][0] + (work_data[value][1] ? ' - ' + work_data[value][1] : '') + '</div><div class="tbl_c"><div title="' + game_data['chr_cls'][work_data[value][2]][0] + '" class="class_icon table_class table_class_' + work_data[value][2] + '"></div></div><div class="tbl_c level_char" data-id="' + value + '"><span>' + work_data[value][3] + '</span><div class="level_control"></div></div><div class="tbl_c">' + game_data['chr_atk'][work_data[value][4]] + '</div></div>';
+
+                chr_prv = work_data[value][0];
+            }
         });
     } else {
         chr_txt = '<div class="tbl_b"><div class="tbl_r"><div class="tbl_c char_empty">No characters found.</div></div>';
