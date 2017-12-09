@@ -25,7 +25,7 @@
         '21' : [ "Calculon",                   null,                 0, 0, 0 ],
         '22' : [ "Calculon",                   "Ghost",              2, 0, 0 ],
         '23' : [ "Calculon",                   "Shakespeare",        4, 0, 0 ],
-        '24' : [ "Father Changstein El-Gamal", null,                 4, 0, 3 ],
+        '24' : [ "Father Changstein El-Gamal", null,                 4, 0, 1 ],
         '25' : [ "Chris Hardwick",             null,                 0, 0, 2 ],
         '26' : [ "Crushinator",                null,                 4, 0, 1 ],
         '27' : [ "Destructor",                 null,                 0, 0, 1 ],
