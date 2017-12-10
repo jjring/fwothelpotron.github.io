@@ -65,37 +65,28 @@ function dataSync() {
     dataUpdate(true, true);
 }
 
-function dataUpdate(drawTable, drawStats, init) {
+function dataUpdate(drawTable, drawStats, init, updateChar) {
     //console.log('[' + new Date().toISOString().substr(11, 12) + '] ' + arguments.callee.name + ' - called by ' + arguments.callee.caller.name + (!!init ? ' (init mode)' : ''));
 
-    var temp_data = [];
+    if (updateChar) {
+        user_data['chr_all'][updateChar[0]] = updateChar[1];
+    } else {
+        user_data = { 'chr_all' : {}, 'chr_own' : [], 'chr_rst' : [], 'chr_unq' : [], 'flt_lst' : {}, 'flt_chr' : [], 'flt_has' : false };
 
-    user_data = { 'chr_all' : {}, 'chr_own' : [], 'chr_rst' : [], 'msc_flt' : {}, 'msc_sts' : { 'chr_unq' : [], 'chr_out' : [], 'chr_cls' : { '0' : [], '1' : [], '2' : [], '3' : [], '4' : [], '5' : [] }, 'chr_avg' : 0, 'chr_atk' : { '0' : [], '1' : [], '2' : [], '3' : [] } } };
+        $.each( work_data, function( key, value ) {
+            user_data['chr_all'][key] = value[3];
 
-    $.each( work_data, function( key, value ) {
-        user_data['chr_all'][key] = value[3];
-
-        if (value[3] != 0) {
-            user_data['chr_own'].push(key);
-
-            if (temp_data.indexOf(value[0]) == -1) {
-                temp_data.push(value[0]);
-                user_data['msc_sts']['chr_unq'].push(key);
+            if (value[3] != 0) {
+                user_data['chr_own'].push(key);
+                
+                if (value[1] === null) {
+                    user_data['chr_unq'].push(value);
+                }
             } else {
-                user_data['msc_sts']['chr_out'].push(key);
+                user_data['chr_rst'].push(key);
             }
-
-            user_data['msc_sts']['chr_atk'][value[4]].push(key);
-            user_data['msc_sts']['chr_avg'] += value[3];
-            user_data['msc_sts']['chr_cls'][value[2]].push(key);
-        } else {
-            user_data['chr_rst'].push(key);
-        }
-    });
-
-    user_data['msc_sts']['chr_avg'] = user_data['msc_sts']['chr_avg'] != 0 ? (user_data['msc_sts']['chr_avg'] / user_data['chr_own'].length).toFixed(2) : '0';
-
-    temp_data = [];
+        });
+    }
 
     localStorage.setItem('user_data', JSON.stringify(user_data));
     
@@ -122,37 +113,52 @@ function dataUpdate(drawTable, drawStats, init) {
     }
 }
 
+function filterResults() {
+    //console.log('[' + new Date().toISOString().substr(11, 12) + '] ' + arguments.callee.name + ' - called by ' + arguments.callee.caller.name);
+
+    var flt_has = false;
+
+    user_data['flt_chr'] = user_data['chr_own'];
+
+    $.each( user_data['flt_lst'], function( type, filter ) {
+        if (filter.length) {
+            var type_id = game_data['chr_map'].indexOf(type);
+            
+            flt_has = true;
+
+            if (type_id == 1){
+                user_data['flt_chr'] = user_data['flt_chr'].filter(function(value) {
+                    return (user_data['flt_lst'][type].indexOf(0) != -1 ? work_data[value][type_id] == null : false) || (user_data['flt_lst'][type].indexOf(1) != -1 ? work_data[value][type_id] != null : false);
+                });
+            } else if (type_id == 3) {
+                user_data['flt_chr'] = user_data['flt_chr'].filter(function(value) {
+                    return (work_data[value][type_id] >= user_data['flt_lst'][type][0]) && (work_data[value][type_id] <= user_data['flt_lst'][type][1]);
+                });
+            } else {
+                user_data['flt_chr'] = user_data['flt_chr'].filter(function(value) {
+                    return user_data['flt_lst'][type].indexOf(work_data[value][type_id]) > -1;
+                });
+            }
+        }
+    });
+
+    user_data['flt_has'] = flt_has;
+
+    $('#tab_head_1, #tab_body_1, #tab_head_2, #tab_body_2').toggleClass('hasFilter', flt_has);
+    $('#filter_clear').toggleClass('disabled', !flt_has).text(flt_has ? 'Clear all filters' : 'No active filters');
+
+    drawCharTable();
+    drawCharStats();
+}
+
 function drawCharTable() {
     //console.log('[' + new Date().toISOString().substr(11, 12) + '] ' + arguments.callee.name + ' - called by ' + arguments.callee.caller.name);
 
     $('#char_tbl_own .tbl_b').remove();
 
-    var chr_prv = null,
-        chr_lst = user_data['chr_own'],
-        chr_txt = '',
-        has_flt = false;
-
-    $.each( user_data['msc_flt'], function( type, filter ) {
-        if (filter.length) {
-            var type_id = game_data['chr_map'].indexOf(type);
-            
-            has_flt = true;
-
-            if (type_id == 1){
-                chr_lst = chr_lst.filter(function(value) {
-                    return (user_data['msc_flt'][type].indexOf(0) != -1 ? work_data[value][type_id] == null : false) || (user_data['msc_flt'][type].indexOf(1) != -1 ? work_data[value][type_id] != null : false);
-                });
-            } else if (type_id == 3) {
-                chr_lst = chr_lst.filter(function(value) {
-                    return (work_data[value][type_id] >= user_data['msc_flt'][type][0]) && (work_data[value][type_id] <= user_data['msc_flt'][type][1]);
-                });
-            } else {
-                chr_lst = chr_lst.filter(function(value) {
-                    return user_data['msc_flt'][type].indexOf(work_data[value][type_id]) > -1;
-                });
-            }
-        }
-    });
+    var chr_lst = user_data['flt_has'] ? user_data['flt_chr'] : user_data['chr_own'],
+        chr_prv = null,
+        chr_txt = '';
 
     if (Object.keys(chr_lst).length) {
         $.each( game_data['chr_ord'], function( index, value ) {
@@ -173,27 +179,43 @@ function drawCharTable() {
     chr_txt += '</div>';
 
     $(chr_txt).insertAfter($('#char_tbl_own .tbl_h'));
-
-    $('#tab_head_2, #tab_body_2').toggleClass('hasFilter', has_flt);
 }
 
 function drawCharStats() {
     //console.log('[' + new Date().toISOString().substr(11, 12) + '] ' + arguments.callee.name + ' - called by ' + arguments.callee.caller.name);
+    
+    var char_list = user_data['flt_has'] ? user_data['flt_chr'] : user_data['chr_own'],
+        stat_data = { 'chr_unq' : [], 'chr_out' : [], 'chr_cls' : { '0' : [], '1' : [], '2' : [], '3' : [], '4' : [], '5' : [] }, 'chr_avg' : 0 },
+        total_cp = 0;
 
-    var total_cp = 0;
+    $.each( char_list, function( index, value ) {
+        if (work_data[value][3] != 0) {
 
-    $.each( user_data['msc_sts']['chr_cls'], function( key, value ) {
+            if (work_data[value][1] === null) {
+                stat_data['chr_unq'].push(value);
+            } else {
+                stat_data['chr_out'].push(value);
+            }
+
+            stat_data['chr_avg'] += work_data[value][3];
+            stat_data['chr_cls'][work_data[value][2]].push(value);
+        }
+    });
+
+    stat_data['chr_avg'] = stat_data['chr_avg'] != 0 ? (stat_data['chr_avg'] / char_list.length).toFixed(2) : '0';
+
+    $.each( stat_data['chr_cls'], function( key, value ) {
         $('.stats_class_' + key).html(value.length);
     });
 
-    $.each( user_data['chr_own'], function( key, value ) {
+    $.each( char_list, function( key, value ) {
         total_cp += game_data['lvl_cpl'].slice(0, work_data[value][3]).reduce(function(ac, cp) {
             return ac + cp;
         });
     });
 
-    $('.stats_text').html('<div>Unique<div>' + user_data['msc_sts']['chr_unq'].length + '</div></div><div>Outfits<div>' + user_data['msc_sts']['chr_out'].length + '</div></div><div>Total<div>' + user_data['chr_own'].length + ' of ' + Object.keys(user_data['chr_all']).length + '</div></div><div>Average level<div>' + user_data['msc_sts']['chr_avg'] + '</div></div>');
-    $('.stats_expense').html('Leveling up your characters, you spent <div><div><div class="items_icon items_nb"></div>' + (total_cp * 1.6).toLocaleString() + '</div><div><div class="items_icon items_giga_r"></div>' + total_cp.toLocaleString() + '</div></div>');
+    $('.stats_text').html('<div>Unique<div>' + stat_data['chr_unq'].length + '</div></div><div>Outfits<div>' + stat_data['chr_out'].length + '</div></div><div>' + (user_data['flt_has'] ? 'Showing' : 'Total') + '<div>' + char_list.length + ' of ' + (user_data['flt_has'] ? user_data['chr_own'].length : Object.keys(user_data['chr_all']).length )+ '</div></div><div>Average level<div>' + stat_data['chr_avg'] + '</div></div>');
+    $('.stats_expense').html('Leveling up ' + (user_data['flt_has'] ? 'these' : 'your') + ' characters, you spent <div><div><div class="items_icon items_nb"></div>' + (total_cp * 1.6).toLocaleString() + '</div><div><div class="items_icon items_giga_r"></div>' + total_cp.toLocaleString() + '</div></div>');
 }
 
 function drawCharSetup(init) {
@@ -301,17 +323,15 @@ function appInit(init) {
         $('#char_tbl_own').on('click', '.tbl_b .tbl_r', function(e) {
             if (!$(e.target).closest('.level_control', this).length) {
                 var lvl_ctr_par = $(this).find('.level_char'),
-                    lvl_ctr_elm = lvl_ctr_par.find('.level_control'),
-                    lvl_ctr_sld;
+                    lvl_ctr_elm = lvl_ctr_par.find('.level_control');
 
                 $('#char_tbl_own').find('.level_control_slide').remove();
 
                 if (!$(this).hasClass('selected')) {
                     var lvl_ctr_txt = lvl_ctr_par.find('span'),
                         lvl_ctr_val = parseInt(lvl_ctr_txt.text()),
-                        lvl_ctr_cid = parseInt(lvl_ctr_par.data('id'));
-
-                    lvl_ctr_sld = $('<div class="level_control_slide noUi-extended"></div>').appendTo(lvl_ctr_elm);
+                        lvl_ctr_cid = parseInt(lvl_ctr_par.data('id')),
+                        lvl_ctr_sld = $('<div class="level_control_slide noUi-extended"></div>').appendTo(lvl_ctr_elm);
 
                     noUiSlider.create(lvl_ctr_sld[0], {
                         start: lvl_ctr_val,
@@ -320,12 +340,12 @@ function appInit(init) {
                         connect: [true, false],
                         range: { 'min': 1, 'max': 30 },
                         format: { to: function ( value ) { return Math.round(value); }, from: function ( value ) { return Math.round(value); } }
-                    }).on('update', function(values, handle){
+                    }).on('slide', function(values, handle) {
                         work_data[lvl_ctr_cid][3] = values[0];
 
                         lvl_ctr_txt.text(work_data[lvl_ctr_cid][3]);
 
-                        dataUpdate(false, true);
+                        dataUpdate(false, true, false, [lvl_ctr_cid, values[0]]);
                     });
                 }
 
@@ -339,15 +359,15 @@ function appInit(init) {
             var flt_type = $(this).prop('class').substr(5),
                 flt_actv = $('.show_' + flt_type + ':checkbox:checked');
 
-            user_data['msc_flt'][flt_type] = [];
+            user_data['flt_lst'][flt_type] = [];
 
             if (flt_actv.length) {
                 flt_actv.each(function() {
-                    user_data['msc_flt'][flt_type].push(parseInt($(this).prop('id').substr(flt_type.length + 6)));
+                    user_data['flt_lst'][flt_type].push(parseInt($(this).prop('id').substr(flt_type.length + 6)));
                 });
             }
 
-            drawCharTable();
+            filterResults();
         });
 
         // Controls - Filter - Slider - Level
@@ -360,9 +380,23 @@ function appInit(init) {
             format: { to: function ( value ) { return Math.round(value); }, from: function ( value ) { return Math.round(value); } },
             range: { 'min': 1, 'max': 30 }
         }).on('change', function(values, handle){
-            user_data['msc_flt']['level'] = values;
+            user_data['flt_lst']['level'] = (values[0] == 1 && values[1] == 30) ? [] : values;
 
-            drawCharTable();
+            filterResults();
+        });
+
+        // Controls - Filter - Clear
+        $('#filter_clear').on('click', function() {
+            $('input[class^="show_"]').prop('checked', false);
+            $('.filter_level')[0].noUiSlider.set([1, 30]);
+
+            user_data['flt_lst'] = {};
+            user_data['flt_chr'] = [];
+            user_data['flt_has'] = false;
+
+            $('#tab_head_1, #tab_body_1, #tab_head_2, #tab_body_2').toggleClass('hasFilter', false);
+
+            filterResults();
         });
 
         // Controls - Calculator - Slider - Level
@@ -404,7 +438,7 @@ function appInit(init) {
             format: { to: function ( value ) { return Math.round(value); }, from: function ( value ) { return Math.round(value); } },
             range: { 'min': [ 1, 1 ], '4.348%' : [ 2, 1 ], '8.696%' : [ 3, 1 ], '13.044%' : [ 4, 1], '17.392%' : [ 5, 1 ], '21.740%' : [ 6, 1 ], '26.088%' : [ 7, 1 ], '30.436%' : [ 8, 1 ], '34.784%' : [ 9, 1 ], '39.132%' : [ 10, 2 ], '47.828%' : [ 12, 2 ], '56.524%' : [ 14, 2 ], '65.220%' : [ 16, 2 ], '73.916%' : [ 18, 2 ], '82.612%' : [ 20, 2 ], '91.308%' : [ 22, 2 ], 'max': [ 24 ] }
         }).on('update', function(values, handle){
-            $('.calc_revenue_output').html('Sending everyone on a <span>' + values[0] + ' ' + (values[0] == 1 ? 'hour' : 'hours') + '</span> task will generate<div><div><div class="items_icon items_nb"></div>' + (user_data['msc_sts']['chr_unq'].length * game_data['msc_tsk'][values[0]][0]).toLocaleString() + '</div><div><div class="items_icon items_xp"></div>' + (user_data['msc_sts']['chr_unq'].length * game_data['msc_tsk'][values[0]][1]).toLocaleString() + '</div></div>');
+            $('.calc_revenue_output').html('Sending everyone on a <span>' + values[0] + ' ' + (values[0] == 1 ? 'hour' : 'hours') + '</span> task will generate<div><div><div class="items_icon items_nb"></div>' + (user_data['chr_unq'].length * game_data['msc_tsk'][values[0]][0]).toLocaleString() + '</div><div><div class="items_icon items_xp"></div>' + (user_data['chr_unq'].length * game_data['msc_tsk'][values[0]][1]).toLocaleString() + '</div></div>');
         });
 
         // Controls - UI - Tabs
@@ -504,4 +538,14 @@ $(document).ready(function(){
             $('#main_modal #select_char_all').prop('checked', chk_set.length == chk_set.filter(':checked').length);
         }
     });
+    
+    function hf() {
+        var s = $('#main_logo').width() / 600;
+        $('#main_logo > div').css('transform', 'scale(' + s + ')');
+        $('#main_logo').css('paddingBottom', ($('#main_logo > div').height() * s) + 'px');
+    }
+    
+    $(window).on('resize', hf);
+    hf();
+
 });
