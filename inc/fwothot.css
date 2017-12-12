@@ -113,7 +113,7 @@
     /* Tables -------------------------------------------------------- */
     .tbl_m { width: 100%; }
     .tbl_m .tbl_h { color: rgba(255,255,255,0.5); text-align: center; padding: 0 10px; }
-    .tbl_m .tbl_b { border: 2px rgba(1,147,126,1) solid; border-radius: 5px; color: #f5fff6; margin-top: 3px; padding: 0 10px; }
+    .tbl_m .tbl_b { border: 2px rgba(1,147,126,1) solid; border-radius: 5px; color: #f5fff6; margin-top: 3px; padding: 0 10px; background-color: rgba(26,45,65,0.75); position: relative; }
 
     .tbl_m .tbl_r { display: flex; width: 100%; }
     .tbl_m .tbl_b .tbl_r:not(:last-child) { border-bottom: 1px rgba(255,255,255,0.15) solid; }
@@ -284,6 +284,8 @@
         #main_ctrl { position: absolute; top: 0; width: 100%; }
 
         .controls label { flex: 1 0 26%; max-width: calc(100% / 4); }
+
+        #char_tbl_own .tbl_b:nth-child(2):before { content: ""; position: absolute; left: -3px; top: -15px; right: -6px; background-image: url('../img/fwothot_sc_01.svg'); background-repeat: no-repeat; background-size: 100% 34px; display: block; height: 34px; pointer-events: none; }
     }
 
     @media all and (min-width: 720px) {
@@ -294,7 +296,7 @@
 
         #tabs_head_main { display: none; }
         #tabs_body_main { padding-top: 35px; }
-        #tabs_body_main > div { margin-bottom: 10px; overflow: hidden; padding: 10px 15px; border-radius: 10px; background: #163c4a; position: relative; }
+        #tabs_body_main > div { margin-bottom: 25px; padding: 10px 15px; border-radius: 10px; background: #163c4a; position: relative; }
         #tabs_body_main > div .title_l { cursor: pointer; }
         #tabs_body_main > div .title_l:after { content: "\2770"; display: block; width: 20px; height: 20px; line-height: 20px; text-align: center; font-size: 1.8rem; position: absolute; top: 2px; right: 0; color: rgba(255,255,255,0.35); transform: rotate(90deg); text-shadow: none; }
         #tabs_body_main > div.collapsed .title_l:after { transform: rotate(-90deg); }
@@ -304,6 +306,8 @@
         #tab_body_1.hasFilter:after, #tab_body_2.hasFilter:after { top: 24px; background-color: #ffed42; }
         #tab_body_1.hasFilter:after { left: 85px; }
         #tab_body_2.hasFilter:after { left: 95px; }
+
+        #tabs_body_main > div:before, #char_tbl_own .tbl_b:nth-child(2):before { content: ""; position: absolute; left: -5px; top: -15px; right: -8px; background-image: url('../img/fwothot_sc_01.svg'); background-repeat: no-repeat; background-size: 100% 34px; display: block; height: 34px; pointer-events: none; }
     }
 
     @media all and (max-width: 520px) {
