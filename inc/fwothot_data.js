@@ -6,7 +6,7 @@
 		 '1' : [ "Amy",							null,					1, 0, 0, 2, 0 ],
 		 '3' : [ "Amy",							"Amazonian",			0, 0, 1, 1, 0 ],
 		 '2' : [ "Amy",							"Nightlife",			4, 0, 0, 2, 0 ],
-		'79' : [ "Amy",							"Power Suit",			4, 0, 3, 3, 0 ],
+		'79' : [ "Amy",							"Power Suit",			4, 0, 1, 3, 0 ],
 		 '4' : [ "Ben Franklin",				null,					1, 0, 0, 0, 0 ],
 		 '5' : [ "Bender",						null,					2, 0, 0, 3, 0 ],
 		 '6' : [ "Bender",						"Bee",					4, 0, 1, 0, 0 ],
