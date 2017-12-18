@@ -72,7 +72,7 @@
 		'63' : [ "Mr. Peppy",					null,					3, 0, 3, 3, 0 ],
 		'64' : [ "Lionel Preacherbot",			null,					2, 0, 0, 1, 0 ],
 		'65' : [ "Roberto",						null,					5, 0, 1, 2, 0 ],
-		'66' : [ "Robot Devil",					null,					5, 0, 2, 0, 0 ],
+		'66' : [ "Robot Devil",					null,					5, 0, 1, 0, 0 ],
 		'67' : [ "Robot Gypsy",					null,					4, 0, 2, 0, 0 ],
 		'68' : [ "Scruffy",						null,					4, 0, 1, 0, 0 ],
 		'69' : [ "Slurms McKenzie",				null,					0, 0, 0, 2, 0 ],
