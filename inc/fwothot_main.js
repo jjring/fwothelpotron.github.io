@@ -15,12 +15,13 @@ var user_data = JSON.parse(localStorage.getItem('user_data')) || {},
     work_data = {},
     game_data = {
         'msc_tsk' : { '1' : [ 35, 23 ], '2' : [ 65, 40 ], '3' : [ 80, 54 ], '4' : [ 95, 60 ], '5' : [ 110, 73 ], '6' : [ 125, 85 ], '7' : [ 140, 93 ], '8' : [ 155, 105 ], '9' : [ 170, 112 ], '10' : [ 180, 119 ], '12' : [ 200, 130 ], '14' : [ 215, 143 ], '16' : [ 230, 150 ], '18' : [ 250, 164 ], '20' : [ 265, 176 ], '22' : [ 285, 187 ], '24' : [ 300, 195 ] },
-        'lvl_cpl' : [ 0, 25, 50, 95, 150, 220, 305, 400, 515, 640, 780, 935, 1100, 1285, 1480, 1690, 1915, 2150, 2405, 2670, 2950, 3245, 3550, 3875, 4210, 4560, 4925, 5300, 5695, 6100 ],
+        'lvl_cpl' : [ 0, 25, 50, 95, 150, 220, 305, 400, 515, 640, 780, 935, 1100, 1285, 1480, 1690, 1915, 2150, 2405, 2670, 2950, 3245, 3550, 3875, 4210, 4560, 4925, 5300, 5695, 6100, 6520, 6955, 7400, 7865, 8340, 8830, 9335, 9850, 10385, 10930, 11490, 12065, 12650, 13255, 13870, 14500, 15145, 15800, 16475, 17160, 17860, 18575, 19300, 20045, 20800, 21570, 22355, 23150, 23965, 24790, 25630, 26485, 27350, 28235, 29130, 30040, 30965, 31900, 32855, 33820, 34800, 35795, 36800, 37825, 38860, 39910, 40975, 42050, 43145, 44250, 45370, 46505, 47650, 48815, 49990, 51180, 52385, 53600, 54835, 56080, 57340, 58615, 59900, 61205, 62520, 63850, 65195, 66550, 67925, 69310, 70710, 72125 ],
         'lvl_ccv' : { 'kilo' : [ 25, 38 ], 'mega' : [ 40, 60 ], 'giga' : [ 170, 255 ], 'tera' : [ 410, 615 ], 'peta' : [ 970, 1455 ] },
         'chr_map' : ['name', 'outfit', 'class', 'level', 'attack', 'id'],
         'chr_cls' : [ [ 'Captain', '#ffe52c' ], [ 'Scientist', '#ff4d4d' ], [ 'Robot', '#009dfe' ], [ 'Delivery Boy', '#5efcc1' ], [ 'Influencer', '#ff7200' ], [ 'Villain', '#c238ff' ] ],
         'chr_atk' : [ 'Throw', 'Melee', 'Shoot', 'N/A' ]
-    };
+    },
+    max_level = 99;
 
 
 /* Data functions ----------------------------------- */
@@ -361,7 +362,7 @@ function appInit(init) {
                         behaviour: 'none',
                         step: 1,
                         connect: [true, false],
-                        range: { 'min': 1, 'max': 30 },
+                        range: { 'min': 1, 'max': max_level },
                         format: { to: function ( value ) { return Math.round(value); }, from: function ( value ) { return Math.round(value); } }
                     }).on('slide', function(values, handle) {
                         work_data[lvl_ctr_cid][3] = values[0];
@@ -395,15 +396,15 @@ function appInit(init) {
 
         // Controls - Filter - Slider - Level
         noUiSlider.create($('.filter_level')[0], {
-            start: [1, 30],
+            start: [1, max_level],
             connect: true,
             step: 1,
             behaviour: 'none',
             tooltips: [true, true],
             format: { to: function ( value ) { return Math.round(value); }, from: function ( value ) { return Math.round(value); } },
-            range: { 'min': 1, 'max': 30 }
+            range: { 'min': 1, 'max': max_level }
         }).on('change', function(values, handle){
-            user_data['flt_lst']['level'] = (values[0] == 1 && values[1] == 30) ? [] : values;
+            user_data['flt_lst']['level'] = (values[0] == 1 && values[1] == max_level) ? [] : values;
 
             filterResults();
         });
@@ -411,7 +412,7 @@ function appInit(init) {
         // Controls - Filter - Clear
         $('#filter_clear').on('click', function() {
             $('input[class^="show_"]').prop('checked', false);
-            $('.filter_level')[0].noUiSlider.set([1, 30]);
+            $('.filter_level')[0].noUiSlider.set([1, max_level]);
 
             user_data['flt_lst'] = {};
             user_data['flt_chr'] = [];
@@ -424,13 +425,13 @@ function appInit(init) {
 
         // Controls - Calculator - Slider - Level
         noUiSlider.create($('.calc_level')[0], {
-            start: [1, 30],
+            start: [1, max_level],
             connect: true,
             step: 1,
             behaviour: 'none',
             tooltips: [true, true],
             format: { to: function ( value ) { return Math.round(value); }, from: function ( value ) { return Math.round(value); } },
-            range: { 'min': 1, 'max': 30 }
+            range: { 'min': 1, 'max': max_level }
         }).on('update', function(values, handle) {
             var cp_output = '';
 
